@@ -15,6 +15,9 @@ class Employee(models.Model):
     def __str__(self):
         return f"{self.employee_number} - {self.first_name} {self.last_name}"
 
+    def get_remaining_leave(self):
+        return self.leave - self.medicalleave_set.count()
+
 
 class Department(models.Model):
     name = models.CharField(blank=False, max_length=255)
@@ -31,3 +34,6 @@ class MedicalLeave(models.Model):
     def __str__(self):
         return f"Medicial leave ({self.start_date} to {self.end_date}) for " \
                f"{self.employee.first_name}"
+
+    def get_days(self):
+        return abs((self.start_end_date - self.start_date).days)
