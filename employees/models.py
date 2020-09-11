@@ -37,3 +37,21 @@ class MedicalLeave(models.Model):
 
     def get_days(self):
         return abs((self.start_end_date - self.start_date).days)
+
+
+class Team(models.Model):
+    name = models.CharField(blank=False, max_length=255)
+    members = models.ManyToManyField(Employee, through="Membership")
+
+    def __str__(self):
+        return self.name
+
+
+class Membership(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    joined_date = models.DateField(auto_now=True)
+    role = models.CharField(blank=False, max_length=255)
+
+    def __str__(self):
+        return f"Membership {self.id}"
